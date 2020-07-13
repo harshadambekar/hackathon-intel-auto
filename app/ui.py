@@ -20,7 +20,7 @@ def main_page(data):
 def get_cluster(file_name):
     result = pd.read_csv('C:/Harshad.Ambekar/personal/github/hackathon-intel-auto/dataset/result.csv')      
     df = result[result['file_name']==file_name]
-    st.write(df['ClusterID'])
+    st.write(df['label'])
     
 if __name__ == "__main__":
     main()

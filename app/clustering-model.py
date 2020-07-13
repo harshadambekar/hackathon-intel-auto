@@ -20,14 +20,14 @@ from scipy.cluster.hierarchy import linkage
 from scipy.cluster.hierarchy import dendrogram
 from scipy.cluster.hierarchy import cut_tree
 
-
+df_label = pd.read_csv('C:/Harshad.Ambekar/personal/github/hackathon-intel-auto/dataset/labels.csv')  
 
 
 def main():
     fileDir = os.path.dirname(os.path.realpath('__file__'))
-    filename = os.path.join(fileDir, 'C:/Harshad.Ambekar/personal/github/hackathon-intel-auto/dataset/dataset.csv')
+    filename = os.path.join(fileDir, 'C:/Harshad.Ambekar/personal/github/hackathon-intel-auto/dataset/dataset.csv')    
     filename = os.path.abspath(os.path.realpath(filename))
-    dat = pd.read_csv(filename)    
+    dat = pd.read_csv(filename)          
     #datm=dat.drop(['full_path', 'file_name', 'dir_path', 'repo'],axis=1)
     fun_pca(dat)
 
@@ -47,14 +47,17 @@ def fun_pca(df):
     dat3 = pcs_df2
     dat3_1 = standard_scaler.fit_transform(dat3.drop(['full_path'],axis=1))
     
-    sse_ = []
+    sse_ = []    
     for k in range(2, 10):
-        kmeans = KMeans(n_clusters=k).fit(dat3_1)
+        kmeans = KMeans(n_clusters=k).fit(dat3_1)                        
         sse_.append([k, silhouette_score(dat3_1, kmeans.labels_)])
 
+    
+
     ssd = []
+    
     for num_clusters in list(range(1,10)):
-        model_clus = KMeans(n_clusters = num_clusters, max_iter=50)
+        model_clus = KMeans(n_clusters = num_clusters, max_iter=50)        
         model_clus.fit(dat3_1)
         ssd.append(model_clus.inertia_)
 
@@ -67,6 +70,8 @@ def fun_pca(df):
     dat_km.columns = ['full_path', 'PC1', 'PC2','PC3','ClusterID']
 
     dat5=pd.merge(df,dat_km,on='full_path')
+    dat5= pd.merge(dat5, df_label, how='inner', on='ClusterID')
+
     dat6=dat5[['loginflow','tenantflow','authenflow','authflow','usercreation','tenantcreation','tenantmodifcation','ClusterID']]
 
     clu_loginflow = pd.DataFrame(dat6.groupby(["ClusterID"]).loginflow.mean())
