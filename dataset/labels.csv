@@ -1,6 +1,6 @@
-﻿ClusterID,label
-0,loginflow
-1,tenantflow
-2,authenflow
-3,authflow
-4,usercreation
+﻿ClusterID,label,level,depend
+0,loginflow,0
+1,tenantflow,2,1
+2,authenflow,1,0
+3,authflow,2,1
+4,usercreation,1,0
